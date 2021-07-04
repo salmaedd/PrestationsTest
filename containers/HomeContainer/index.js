@@ -22,9 +22,10 @@ import reducer from "./reducer";
 import saga from "./saga";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { getPrestationsData } from "./actions";
+import { getPrestationsData, addPrestationCartSuccess } from "./actions";
 import Prestation from "../../components/Prestation";
 import TotalCart from "../../components/TotalCart";
+import { convertMinutesToHours } from "../../utils/MainMethods";
 
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -64,14 +65,18 @@ export function HomeContainer(props) {
   const [womanCategorieTitle, setWomanCategorieTitle] = useState("");
   const [menCategorieTitle, setMenCategorieTitle] = useState("");
   const [childrenCategorieTitle, setChildrenCategorieTitle] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [totalDuration, setTotalDuration] = useState(0);
 
-  const { getPrestations } = props;
+  const { getPrestations, addPrestation } = props;
 
   useEffect(() => {
     getPrestations();
+    //addPrestation();
   }, [getPrestations]);
 
   useEffect(() => {
+    console.log("props", props.homeContainer.cart);
     if (props?.homeContainer?.prestations?.categories) {
       setMenCategorie(
         props.homeContainer.prestations.categories[
@@ -104,7 +109,16 @@ export function HomeContainer(props) {
         ].title
       );
     }
-    console.log("props?????", menCategorie);
+  }, [props]);
+
+  useEffect(() => {
+    console.log("props", props.homeContainer.cart);
+    if (props?.homeContainer?.cart) {
+      props?.homeContainer?.cart.map((element) => {
+        setTotalPrice(totalPrice + element.price),
+          setTotalDuration(totalDuration + element.duration);
+      });
+    }
   }, [props]);
 
   const ref = React.createRef();
@@ -125,6 +139,9 @@ export function HomeContainer(props) {
                 title={item.title}
                 duration={item.duration + " Min"}
                 price={item.price + "€"}
+                onPress={() => {
+                  addPrestation(item);
+                }}
               />
             </View>
           )}
@@ -146,6 +163,9 @@ export function HomeContainer(props) {
                 title={item.title}
                 duration={item.duration + " Min"}
                 price={item.price + "€"}
+                onPress={() => {
+                  addPrestation(item);
+                }}
               />
             </View>
           )}
@@ -167,6 +187,9 @@ export function HomeContainer(props) {
                 title={item.title}
                 duration={item.duration + " Min"}
                 price={item.price + "€"}
+                onPress={() => {
+                  addPrestation(item);
+                }}
               />
             </View>
           )}
@@ -174,7 +197,10 @@ export function HomeContainer(props) {
         />
       </ScrollView>
 
-      <TotalCart totalPrice={"200000"} totalHours={300} />
+      <TotalCart
+        totalPrice={totalPrice}
+        totalHours={convertMinutesToHours(totalDuration)}
+      />
     </View>
   );
 }
@@ -188,6 +214,10 @@ function mapDispatchToProps(dispatch) {
     getPrestations: () => {
       dispatch(getPrestationsData());
     },
+    addPrestation: (data) => {
+      dispatch(addPrestationCartSuccess(data));
+    },
+
     dispatch,
   };
 }
