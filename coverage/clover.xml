@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1625318592304" clover="3.2.0">
-  <project timestamp="1625318592304" name="All files">
-    <metrics statements="128" coveredstatements="121" conditionals="42" coveredconditionals="39" methods="48" coveredmethods="46" elements="218" coveredelements="206" complexity="0" loc="128" ncloc="128" packages="4" files="21" classes="21"/>
+<coverage generated="1625357317374" clover="3.2.0">
+  <project timestamp="1625357317374" name="All files">
+    <metrics statements="123" coveredstatements="118" conditionals="42" coveredconditionals="39" methods="46" coveredmethods="44" elements="211" coveredelements="201" complexity="0" loc="123" ncloc="123" packages="4" files="21" classes="21"/>
     <package name="weCasaTest">
       <metrics statements="15" coveredstatements="15" conditionals="2" coveredconditionals="1" methods="3" coveredmethods="3"/>
       <file name="App.js" path="/Users/mac/Desktop/WecasaTest/weCasaTest/App.js">
@@ -56,7 +56,7 @@
       </file>
     </package>
     <package name="weCasaTest.containers.HomeContainer">
-      <metrics statements="33" coveredstatements="28" conditionals="4" coveredconditionals="3" methods="14" coveredmethods="13"/>
+      <metrics statements="28" coveredstatements="25" conditionals="4" coveredconditionals="3" methods="12" coveredmethods="11"/>
       <file name="actions.js" path="/Users/mac/Desktop/WecasaTest/weCasaTest/containers/HomeContainer/actions.js">
         <metrics statements="2" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="1"/>
         <line num="13" count="2" type="stmt"/>
@@ -93,13 +93,8 @@
         <line num="19" count="0" type="stmt"/>
       </file>
       <file name="saga.js" path="/Users/mac/Desktop/WecasaTest/weCasaTest/containers/HomeContainer/saga.js">
-        <metrics statements="6" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
-        <line num="8" count="2" type="stmt"/>
-        <line num="18" count="2" type="stmt"/>
-        <line num="20" count="2" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="30" count="1" type="stmt"/>
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="8" count="1" type="stmt"/>
       </file>
       <file name="selectors.js" path="/Users/mac/Desktop/WecasaTest/weCasaTest/containers/HomeContainer/selectors.js">
         <metrics statements="4" coveredstatements="4" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
