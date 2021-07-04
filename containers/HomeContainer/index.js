@@ -5,7 +5,7 @@
  */
 import React, { useEffect, useState } from "react";
 
-import { View, Text, StyleSheet, LogBox } from "react-native";
+import { View, Text, StyleSheet, LogBox, FlatList } from "react-native";
 import { compose } from "redux";
 
 import { useInjectSaga } from "../../utils/injectSaga";
@@ -16,6 +16,8 @@ import saga from "./saga";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { getPrestationsData } from "./actions";
+import Prestation from "../../components/Prestation";
+import { ScrollView } from "react-native-gesture-handler";
 
 LogBox.ignoreAllLogs();
 
@@ -24,6 +26,21 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignSelf: "center",
+  },
+  PrestationsCard: {
+    marginHorizontal: 10,
+    marginTop: 20,
+  },
+  PrestationsTitle: {
+    fontWeight: "500",
+    color: "#7a879d",
+    fontSize: 16,
+  },
+  categorie: {
+    fontSize: 16,
+    color: "black",
+    fontWeight: "500",
+    marginHorizontal: 10,
   },
 });
 
@@ -45,42 +62,107 @@ export function HomeContainer(props) {
   }, [getPrestations]);
 
   useEffect(() => {
-    setMenCategorie(
-      props.homeContainer.prestations.categories[
-        Object.keys(props.homeContainer.prestations.categories)[0]
-      ]
-    );
-    setWomanCategorie(
-      props.homeContainer.prestations.categories[
-        Object.keys(props.homeContainer.prestations.categories)[1]
-      ]
-    );
-    setChildrenCategorie(
-      props.homeContainer.prestations.categories[
-        Object.keys(props.homeContainer.prestations.categories)[2]
-      ]
-    );
-    setMenCategorieTitle(
-      props.homeContainer.prestations.categories[
-        Object.keys(props.homeContainer.prestations.categories)[0]
-      ].title
-    );
-    setWomanCategorieTitle(
-      props.homeContainer.prestations.categories[
-        Object.keys(props.homeContainer.prestations.categories)[1]
-      ].title
-    );
-    setChildrenCategorieTitle(
-      props.homeContainer.prestations.categories[
-        Object.keys(props.homeContainer.prestations.categories)[2]
-      ].title
-    );
+    if (props?.homeContainer?.prestations?.categories) {
+      setMenCategorie(
+        props.homeContainer.prestations.categories[
+          Object.keys(props.homeContainer.prestations.categories)[0]
+        ]
+      );
+      setWomanCategorie(
+        props.homeContainer.prestations.categories[
+          Object.keys(props.homeContainer.prestations.categories)[1]
+        ]
+      );
+      setChildrenCategorie(
+        props.homeContainer.prestations.categories[
+          Object.keys(props.homeContainer.prestations.categories)[2]
+        ]
+      );
+      setMenCategorieTitle(
+        props.homeContainer.prestations.categories[
+          Object.keys(props.homeContainer.prestations.categories)[0]
+        ].title
+      );
+      setWomanCategorieTitle(
+        props.homeContainer.prestations.categories[
+          Object.keys(props.homeContainer.prestations.categories)[1]
+        ].title
+      );
+      setChildrenCategorieTitle(
+        props.homeContainer.prestations.categories[
+          Object.keys(props.homeContainer.prestations.categories)[2]
+        ].title
+      );
+    }
+    console.log("props?????", menCategorie);
   }, [props]);
 
   const ref = React.createRef();
   return (
     <View style={styles.mainView}>
-      <Text> WeCasa Test App !</Text>
+      <View style={{ flexDirection: "row", marginTop: 80 }}>
+        <Text style={styles.categorie}>Category:</Text>
+        <Text style={styles.PrestationsTitle}>{menCategorieTitle}</Text>
+      </View>
+      <ScrollView>
+        <FlatList
+          data={menCategorie.prestations}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <View style={styles.PrestationsCard}>
+              <Prestation
+                title={item.title}
+                duration={item.duration + " Min"}
+                price={item.price + "€"}
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.reference}
+        />
+
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+          <Text style={styles.categorie}>Category:</Text>
+          <Text style={styles.PrestationsTitle}>{womanCategorieTitle}</Text>
+        </View>
+
+        <FlatList
+          data={womanCategorie.prestations}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <View style={styles.PrestationsCard}>
+              <Prestation
+                title={item.title}
+                duration={item.duration + " Min"}
+                price={item.price + "€"}
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.reference}
+        />
+
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+          <Text style={styles.categorie}>Category:</Text>
+          <Text style={styles.PrestationsTitle}>{childrenCategorieTitle}</Text>
+        </View>
+
+        <FlatList
+          data={childrenCategorie.prestations}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item, index }) => (
+            <View style={styles.PrestationsCard}>
+              <Prestation
+                title={item.title}
+                duration={item.duration + " Min"}
+                price={item.price + "€"}
+              />
+            </View>
+          )}
+          keyExtractor={(item) => item.reference}
+        />
+      </ScrollView>
     </View>
   );
 }

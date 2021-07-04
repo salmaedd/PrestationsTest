@@ -11,7 +11,7 @@ function prestationsApi() {
     headers: {
       Accept: "application/json",
     },
-    url: URL + "/api/techtest/universe",
+    url: "https://www.wecasa.fr/api/techtest/universe",
   });
 }
 
