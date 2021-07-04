@@ -5,7 +5,14 @@
  */
 import React, { useEffect, useState } from "react";
 
-import { View, Text, StyleSheet, LogBox, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  LogBox,
+  FlatList,
+  Dimensions,
+} from "react-native";
 import { compose } from "redux";
 
 import { useInjectSaga } from "../../utils/injectSaga";
@@ -17,9 +24,12 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 import { getPrestationsData } from "./actions";
 import Prestation from "../../components/Prestation";
+import TotalCart from "../../components/TotalCart";
+
 import { ScrollView } from "react-native-gesture-handler";
 
 LogBox.ignoreAllLogs();
+const deviceWitdh = Dimensions.get("window").width;
 
 export const styles = StyleSheet.create({
   mainView: {
@@ -163,6 +173,8 @@ export function HomeContainer(props) {
           keyExtractor={(item) => item.reference}
         />
       </ScrollView>
+
+      <TotalCart totalPrice={"200000"} totalHours={300} />
     </View>
   );
 }

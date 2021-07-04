@@ -40,7 +40,6 @@ export const styles = StyleSheet.create({
   productContainer: {
     width: 130,
     height: 90,
-    //borderColor: "#24378b",
     borderRadius: 10,
     marginBottom: 10,
   },
@@ -65,34 +64,26 @@ export const styles = StyleSheet.create({
   },
   price: {
     color: "#7a879d",
-    fontSize: 10,
-    fontWeight: "bold",
-  },
-  point: {
-    width: 20,
-    height: 10,
-  },
-  pointStyle: {
-    color: "#ffffff",
     fontSize: 14,
+    fontWeight: "bold",
   },
 });
 
 function Prestation(props) {
   return (
     <View style={[styles.main, styles.boxShadow]}>
-      <Image
+      {/* <Image
         source={require("../../assets/noImage.png")}
         style={styles.productContainer}
         PlaceholderContent={<ActivityIndicator />}
-      />
+      /> */}
       <Text style={styles.title} numberOfLines={1}>
         {props.title}
       </Text>
+      <Text style={styles.price}>{props.price}</Text>
       <Text style={styles.duration} numberOfLines={1}>
-        {props.duration} <Text style={styles.price}>{props.price}</Text>
+        {props.duration}
       </Text>
-
       <TouchableOpacity onPress={props.onPress}>
         <Text style={styles.plusButton} numberOfLines={1}>
           {"+"}
