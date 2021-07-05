@@ -117,7 +117,6 @@ export function HomeContainer(props) {
   }, [props]);
 
   useEffect(() => {
-    console.log("props herererererrere", props?.homeContainer?.cart);
     if (props?.homeContainer?.cart !== []) {
       props?.homeContainer?.cart.map((element) => {
         setTotalPrice(totalPrice + element.price),

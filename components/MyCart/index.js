@@ -86,7 +86,6 @@ function MyCart(props) {
     if (props?.data) {
       let key = "reference";
       setCartItems(findOcc(props.data, key));
-      console.log("===========>", findOcc(props.data, key));
     }
   }, [props]);
 
