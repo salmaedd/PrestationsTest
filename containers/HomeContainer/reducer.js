@@ -7,6 +7,7 @@ import produce from "immer";
 import {
   GET_PRESTATIONS_DATA_SUCCESS,
   ADD_PRESTATIONS_CART,
+  DELETE_PRESTATIONS_CART,
 } from "./constants";
 import { filter, findIndex } from "lodash";
 
@@ -23,6 +24,11 @@ const homeContainerReducer = (state = initialState, action) =>
         break;
       case ADD_PRESTATIONS_CART:
         draft.cart = [...draft.cart, action.data];
+        break;
+      case DELETE_PRESTATIONS_CART:
+        draft.cart = draft.cart.filter(
+          (element) => element.reference !== action.data
+        );
         break;
     }
   });

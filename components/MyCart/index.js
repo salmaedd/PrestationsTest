@@ -16,6 +16,7 @@ import {
   FlatList,
 } from "react-native";
 import Modal from "react-native-modal";
+import { findOcc } from "../../utils/MainMethods";
 
 const deviceWitdh = Dimensions.get("window").width;
 
@@ -63,9 +64,10 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     marginHorizontal: 10,
     marginVertical: 10,
-    // width: 120,
     marginBottom: 5,
     alignSelf: "center",
+    justifyContent: "center",
+    textAlign: "center",
   },
   price: {
     marginHorizontal: 10,
@@ -82,7 +84,9 @@ function MyCart(props) {
 
   useEffect(() => {
     if (props?.data) {
-      let tabPrestation = props?.data;
+      let key = "reference";
+      setCartItems(findOcc(props.data, key));
+      console.log("===========>", findOcc(props.data, key));
     }
   }, [props]);
 
@@ -111,23 +115,22 @@ function MyCart(props) {
       <View style={styles.content}>
         <FlatList
           numColumns={2}
-          data={props.data}
+          data={cartItems}
           renderItem={({ item, index }) => (
             <View style={styles.main}>
               <View style={{ flexDirection: "row" }}>
                 <View>
-                  <Text style={styles.title} numberOfLines={1}>
+                  <Text style={styles.duration} numberOfLines={1}>
+                    {item.occurrence + " X "}
+                  </Text>
+                  <Text style={styles.title} numberOfLines={2}>
                     {item.title}
                   </Text>
-                  <View style={{ flexDirection: "row" }}>
-                    <Text style={styles.price}>{item.price + " €"}</Text>
-
-                    <Text style={styles.duration} numberOfLines={1}>
-                      {item.duration + " Min"}
-                    </Text>
-                  </View>
-
-                  <TouchableOpacity onPress={item.onPress}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      props.onPress(item.reference);
+                    }}
+                  >
                     <Text style={styles.plusButton} numberOfLines={1}>
                       {"-"}
                     </Text>
@@ -136,7 +139,7 @@ function MyCart(props) {
               </View>
             </View>
           )}
-          keyExtractor={(item) => props.data.reference}
+          keyExtractor={(item) => item.reference}
         />
       </View>
     </Modal>

@@ -15,7 +15,6 @@ import {
   SafeAreaView,
 } from "react-native";
 import { compose } from "redux";
-import { Container, NativeBaseProvider } from "native-base";
 import { useInjectSaga } from "../../utils/injectSaga";
 import { useInjectReducer } from "../../utils/injectReducer";
 import makeSelectHomeContainer from "./selectors";
@@ -23,7 +22,11 @@ import reducer from "./reducer";
 import saga from "./saga";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { getPrestationsData, addPrestationCartSuccess } from "./actions";
+import {
+  getPrestationsData,
+  addPrestationCartSuccess,
+  deletePrestationCartSuccess,
+} from "./actions";
 import Prestation from "../../components/Prestation";
 import TotalCart from "../../components/TotalCart";
 import MyCart from "../../components/MyCart";
@@ -72,15 +75,13 @@ export function HomeContainer(props) {
   const [totalDuration, setTotalDuration] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
 
-  const { getPrestations, addPrestation } = props;
+  const { getPrestations, addPrestation, deletePrestationFromCart } = props;
 
   useEffect(() => {
     getPrestations();
-    //addPrestation();
   }, [getPrestations]);
 
   useEffect(() => {
-    console.log("props", props.homeContainer.cart);
     if (props?.homeContainer?.prestations?.categories) {
       setMenCategorie(
         props.homeContainer.prestations.categories[
@@ -116,8 +117,8 @@ export function HomeContainer(props) {
   }, [props]);
 
   useEffect(() => {
-    console.log("props", props.homeContainer.cart);
-    if (props?.homeContainer?.cart) {
+    console.log("props herererererrere", props?.homeContainer?.cart);
+    if (props?.homeContainer?.cart !== []) {
       props?.homeContainer?.cart.map((element) => {
         setTotalPrice(totalPrice + element.price),
           setTotalDuration(totalDuration + element.duration);
@@ -147,7 +148,7 @@ export function HomeContainer(props) {
                 <Prestation
                   title={item.title}
                   duration={item.duration + " Min"}
-                  price={item.price + "€"}
+                  price={item.price / 100 + "€"}
                   onPress={() => {
                     addPrestation(item);
                   }}
@@ -171,7 +172,7 @@ export function HomeContainer(props) {
                 <Prestation
                   title={item.title}
                   duration={item.duration + " Min"}
-                  price={item.price + "€"}
+                  price={item.price / 100 + "€"}
                   onPress={() => {
                     addPrestation(item);
                   }}
@@ -197,7 +198,7 @@ export function HomeContainer(props) {
                 <Prestation
                   title={item.title}
                   duration={item.duration + " Min"}
-                  price={item.price + "€"}
+                  price={item.price / 100 + "€"}
                   onPress={() => {
                     addPrestation(item);
                   }}
@@ -209,7 +210,7 @@ export function HomeContainer(props) {
         </ScrollView>
 
         <TotalCart
-          totalPrice={totalPrice}
+          totalPrice={totalPrice / 100}
           totalHours={convertMinutesToHours(totalDuration)}
           onPress={() => {
             setIsVisible(!isVisible);
@@ -219,6 +220,11 @@ export function HomeContainer(props) {
           isVisible={isVisible}
           toggleModal={toggleModal}
           data={props?.homeContainer?.cart}
+          onPress={(item) => {
+            deletePrestationFromCart(item);
+            setTotalDuration(0);
+            setTotalPrice(0);
+          }}
         />
       </View>
     </SafeAreaView>
@@ -236,6 +242,9 @@ function mapDispatchToProps(dispatch) {
     },
     addPrestation: (data) => {
       dispatch(addPrestationCartSuccess(data));
+    },
+    deletePrestationFromCart: (data) => {
+      dispatch(deletePrestationCartSuccess(data));
     },
 
     dispatch,
