@@ -12,9 +12,10 @@ import {
   LogBox,
   FlatList,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { compose } from "redux";
-
+import { Container, NativeBaseProvider } from "native-base";
 import { useInjectSaga } from "../../utils/injectSaga";
 import { useInjectReducer } from "../../utils/injectReducer";
 import makeSelectHomeContainer from "./selectors";
@@ -25,6 +26,8 @@ import { createStructuredSelector } from "reselect";
 import { getPrestationsData, addPrestationCartSuccess } from "./actions";
 import Prestation from "../../components/Prestation";
 import TotalCart from "../../components/TotalCart";
+import MyCart from "../../components/MyCart";
+
 import { convertMinutesToHours } from "../../utils/MainMethods";
 
 import { ScrollView } from "react-native-gesture-handler";
@@ -67,6 +70,7 @@ export function HomeContainer(props) {
   const [childrenCategorieTitle, setChildrenCategorieTitle] = useState("");
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
 
   const { getPrestations, addPrestation } = props;
 
@@ -121,87 +125,103 @@ export function HomeContainer(props) {
     }
   }, [props]);
 
+  const toggleModal = () => {
+    setIsVisible(!isVisible);
+  };
+
   const ref = React.createRef();
   return (
-    <View style={styles.mainView}>
-      <View style={{ flexDirection: "row", marginTop: 80 }}>
-        <Text style={styles.categorie}>Category:</Text>
-        <Text style={styles.PrestationsTitle}>{menCategorieTitle}</Text>
+    <SafeAreaView style={styles.mainView}>
+      <View>
+        <View style={{ flexDirection: "row", marginTop: 50 }}>
+          <Text style={styles.categorie}>Category:</Text>
+          <Text style={styles.PrestationsTitle}>{menCategorieTitle}</Text>
+        </View>
+        <ScrollView>
+          <FlatList
+            data={menCategorie.prestations}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, index }) => (
+              <View style={styles.PrestationsCard}>
+                <Prestation
+                  title={item.title}
+                  duration={item.duration + " Min"}
+                  price={item.price + "€"}
+                  onPress={() => {
+                    addPrestation(item);
+                  }}
+                />
+              </View>
+            )}
+            keyExtractor={(item) => item.reference}
+          />
+
+          <View style={{ flexDirection: "row", marginTop: 20 }}>
+            <Text style={styles.categorie}>Category:</Text>
+            <Text style={styles.PrestationsTitle}>{womanCategorieTitle}</Text>
+          </View>
+
+          <FlatList
+            data={womanCategorie.prestations}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, index }) => (
+              <View style={styles.PrestationsCard}>
+                <Prestation
+                  title={item.title}
+                  duration={item.duration + " Min"}
+                  price={item.price + "€"}
+                  onPress={() => {
+                    addPrestation(item);
+                  }}
+                />
+              </View>
+            )}
+            keyExtractor={(item) => item.reference}
+          />
+
+          <View style={{ flexDirection: "row", marginTop: 20 }}>
+            <Text style={styles.categorie}>Category:</Text>
+            <Text style={styles.PrestationsTitle}>
+              {childrenCategorieTitle}
+            </Text>
+          </View>
+
+          <FlatList
+            data={childrenCategorie.prestations}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, index }) => (
+              <View style={styles.PrestationsCard}>
+                <Prestation
+                  title={item.title}
+                  duration={item.duration + " Min"}
+                  price={item.price + "€"}
+                  onPress={() => {
+                    addPrestation(item);
+                  }}
+                />
+              </View>
+            )}
+            keyExtractor={(item) => item.reference}
+          />
+        </ScrollView>
+
+        <TotalCart
+          totalPrice={totalPrice}
+          totalHours={convertMinutesToHours(totalDuration)}
+          onPress={() => {
+            setIsVisible(!isVisible);
+          }}
+        />
+        <MyCart
+          isVisible={isVisible}
+          toggleModal={toggleModal}
+          data={props?.homeContainer?.cart}
+        />
       </View>
-      <ScrollView>
-        <FlatList
-          data={menCategorie.prestations}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item, index }) => (
-            <View style={styles.PrestationsCard}>
-              <Prestation
-                title={item.title}
-                duration={item.duration + " Min"}
-                price={item.price + "€"}
-                onPress={() => {
-                  addPrestation(item);
-                }}
-              />
-            </View>
-          )}
-          keyExtractor={(item) => item.reference}
-        />
-
-        <View style={{ flexDirection: "row", marginTop: 20 }}>
-          <Text style={styles.categorie}>Category:</Text>
-          <Text style={styles.PrestationsTitle}>{womanCategorieTitle}</Text>
-        </View>
-
-        <FlatList
-          data={womanCategorie.prestations}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item, index }) => (
-            <View style={styles.PrestationsCard}>
-              <Prestation
-                title={item.title}
-                duration={item.duration + " Min"}
-                price={item.price + "€"}
-                onPress={() => {
-                  addPrestation(item);
-                }}
-              />
-            </View>
-          )}
-          keyExtractor={(item) => item.reference}
-        />
-
-        <View style={{ flexDirection: "row", marginTop: 20 }}>
-          <Text style={styles.categorie}>Category:</Text>
-          <Text style={styles.PrestationsTitle}>{childrenCategorieTitle}</Text>
-        </View>
-
-        <FlatList
-          data={childrenCategorie.prestations}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item, index }) => (
-            <View style={styles.PrestationsCard}>
-              <Prestation
-                title={item.title}
-                duration={item.duration + " Min"}
-                price={item.price + "€"}
-                onPress={() => {
-                  addPrestation(item);
-                }}
-              />
-            </View>
-          )}
-          keyExtractor={(item) => item.reference}
-        />
-      </ScrollView>
-
-      <TotalCart
-        totalPrice={totalPrice}
-        totalHours={convertMinutesToHours(totalDuration)}
-      />
-    </View>
+    </SafeAreaView>
   );
 }
 

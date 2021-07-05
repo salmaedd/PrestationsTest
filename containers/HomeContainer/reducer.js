@@ -15,7 +15,6 @@ export const initialState = {
   cart: [],
 };
 
-/* eslint-disable default-case, no-param-reassign */
 const homeContainerReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
